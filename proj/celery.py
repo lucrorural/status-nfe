@@ -14,6 +14,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'status_portal_nfe': {
         'task': 'task_status_portal_nfe',
-        'schedule': 60 * 60,
+        'schedule': 10 * 60,  # 10 minutes
     }
 }
