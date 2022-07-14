@@ -1,4 +1,5 @@
 from celery import shared_task
+from django.core.cache import cache
 
 from status_nfe.models import StatusNfe
 from status_nfe.utils import DisponibilidadeNFe
@@ -8,17 +9,18 @@ from status_nfe.utils import DisponibilidadeNFe
 def status_portal_nfe():
     disp_nfe = DisponibilidadeNFe()
     data = disp_nfe.get_status()
-    print(data)
 
     for item in data:
-        print(item)
         autorizador = item['autorizador']
+        ultima_verificacao = item['ultima_verificacao']
 
         obj = StatusNfe.objects.filter(autorizador=autorizador)
         if obj.exists():
-            print(f'update = {autorizador}')
             obj.update(**item)
         else:
-            print(f'create = {autorizador}')
             obj.create(**item)
+
+        print(f'update {autorizador} {ultima_verificacao}')
+
+    cache.clear()
     return 'OK'

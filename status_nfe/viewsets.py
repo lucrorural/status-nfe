@@ -1,5 +1,7 @@
-from rest_framework.filters import SearchFilter, OrderingFilter
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from status_nfe.serializers import StatusNfeSerializer
@@ -36,7 +38,9 @@ webservice = {
     'TO': 'SVRS',
 }
 
+CACHE_TIME = 60 * 10  # 10 minutes
 
+@method_decorator(cache_page(CACHE_TIME), name='dispatch')
 class StatusNfeViewSet(ReadOnlyModelViewSet):
     serializer_class = StatusNfeSerializer
     queryset = StatusNfe.objects.all().order_by('autorizador')
@@ -50,5 +54,7 @@ class StatusNfeViewSet(ReadOnlyModelViewSet):
         qs = self.queryset
         uf = self.request.query_params.get('uf', None)
         if uf:
-            return qs.filter(autorizador=webservice[uf])
+            if uf.upper() not in webservice.keys():
+                return qs
+            return qs.filter(autorizador=webservice[uf.upper()])
         return qs
