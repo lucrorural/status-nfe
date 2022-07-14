@@ -10,11 +10,11 @@ LABEL org.lucrorural.vendor="Lucro Rural"
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install -r /code/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
-COPY . /code/
-WORKDIR /code/
+COPY . /app/
+WORKDIR /app/
 
 EXPOSE 8000
 

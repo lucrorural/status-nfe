@@ -11,8 +11,6 @@ ROOT_DIR = environ.Path(__file__) - 2
 env = environ.Env()
 env.read_env(str(ROOT_DIR.path('.env')))
 
-ROOT_DIR = environ.Path(__file__) - 2
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -32,7 +30,7 @@ SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -106,20 +104,14 @@ WSGI_APPLICATION = 'proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': 'database',
+        'PORT': 5432,
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env('POSTGRES_DB'),
-#         'USER': env('POSTGRES_USER'),
-#         'PASSWORD': env('POSTGRES_PASSWORD'),
-#         'HOST': env('DATABASE_HOST', default=''),
-#         'PORT': env('DATABASE_PORT', default=''),
-#     }
-# }
 
 
 # Password validation

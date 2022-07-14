@@ -2,48 +2,50 @@ version: '1'
 
 services:
 
-  db:
+  database:
     image: postgres:13-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=statusnfe
-      - POSTGRES_USER=status
-      - POSTGRES_PASSWORD=status
-      - DATABASE_HOST=0.0.0.0
-      - DATABASE_PORT=5432
+      POSTGRES_DB: statusnfe
+      POSTGRES_USER: status
+      POSTGRES_PASSWORD: status
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
 
   redis:
     image: redis:6-alpine
     ports:
-    - "6379:6379"
+      - "6379:6379"
 
   web:
     build: .
     volumes:
-      - .:/code
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - database
       - redis
 
   celery:
     build: .
     command: celery -A proj worker -l info
     volumes:
-      - .:/code
+      - .:/app
     depends_on:
-      - db
+      - database
       - redis
 
   celery-beat:
     build: .
     command: celery -A proj beat -l info
     volumes:
-      - .:/code
+      - .:/app
     depends_on:
-      - db
+      - database
       - redis
 
 volumes:
