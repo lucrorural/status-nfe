@@ -1,4 +1,4 @@
-django==3.2.16
+django==3.2.17
 djangorestframework==3.13.1
 psycopg2-binary==2.9.3
 celery[redis]
