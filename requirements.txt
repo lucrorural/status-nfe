@@ -1,8 +1,8 @@
 django==3.2.18
-djangorestframework==3.13.1
-psycopg2-binary==2.9.3
+djangorestframework==3.14.0
+psycopg2-binary==2.9.5
 celery[redis]
-django-celery-beat==2.3.0
+django-celery-beat==2.4.0
 django-celery-results==2.4.0
 django-environ==0.9.0
 django-redis
